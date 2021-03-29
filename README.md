@@ -3,8 +3,8 @@ Template generator for REDCap external modules.
 
 ## Requirements
 
-Node.js
-Composer (for testing)
+- Node.js
+- Composer (for testing)
 
 ## Setup
 
@@ -19,6 +19,8 @@ Run the module generator directly over npx
 ```bash
    npx create-redcap-module
 ``` 
+
+After completing the necessary input, a module folder will be available.
 
 ## Testing
 
