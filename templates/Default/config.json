@@ -1,0 +1,40 @@
+{
+    "name": "_M_NAME",
+
+    "namespace": "_NAMESPACE\\_M_CC_NAME", 
+
+    "description": "Another module made with create-redcap-module.",
+
+    "documentation": "README.md",
+
+    "authors": [
+        {
+             "name": "_A_NAME",
+             "email": "_A_EMAIL",
+             "institution": "_A_ORG"
+         }
+     ],
+
+    "framework-version": 6,
+
+    "permissions": [
+        "redcap_every_page_top"
+    ],
+
+    "enable-every-page-hooks-on-system-pages": false,
+
+    "links":{},
+
+    "no-auth-pages": [],
+
+    "system-settings": [],
+
+    "project-settings": [],
+
+    "crons": [],
+
+    "compatibility": {
+        "php-version-min": "5.4.0",
+        "redcap-version-min": "8.0.0"
+    }
+ }
