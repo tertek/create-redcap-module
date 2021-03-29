@@ -8,8 +8,17 @@ Composer (for testing)
 
 ## Setup
 
-cd into your modules folder
-npx create-redcap-module
+Navigate into your redcap modules folder
+
+```bash
+   cd modules
+``` 
+
+Run the module generator directly over npx
+
+```bash
+   npx create-redcap-module
+``` 
 
 ## Testing
 
