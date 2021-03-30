@@ -14,14 +14,14 @@ import snakeCase from 'lodash/snakeCase';
 
 
 const access = promisify(fs.access);
-const copy = promisify(ncp);
 const replace = promisify(rif);
 
 async function copyTemplateFiles(options) {
-
-  return copy(options.templateDirectory, options.targetDirectory, {
-    clobber: false,
-  });
+  
+  fs.copy(options.templateDirectory, options.targetDirectory, err => {
+    if (err) return Promise.reject(new Error('Failed to copy files'));
+  })
+  
 }
 
 async function renameTemplateFiles(options){

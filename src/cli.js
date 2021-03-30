@@ -8,9 +8,11 @@ function parseArgumentsIntoOptions(rawArgs) {
      '--git': Boolean,
      '--yes': Boolean,
      '--install': Boolean,
+     '--debug': Boolean,
      '-g': '--git',
      '-y': '--yes',
      '-i': '--install',
+     '-d': '--debug',
    },
    {
      argv: rawArgs.slice(2),
@@ -21,6 +23,7 @@ function parseArgumentsIntoOptions(rawArgs) {
    git: args['--git'] || false,
    template: args._[0],
    runInstall: args['--install'] || false,
+   debug: args['--debug'] || false,
  };
 }
 
@@ -37,13 +40,16 @@ async function promptForMissingOptions(options) {
  if (options.skipPrompts) {
    return {
      ...options,
-     moduleName: options.moduleName || defaultModuleName,     
-     namespace: options.namespace || defaultNamespace,
      template: options.template || defaultTemplate,
-     features: options.features || defaultFeatures,
-     author: options.author || defaultAuthor,
-     email: options.email || defaultEmail,
-     org: options.org || defaultOrg
+     moduleName: defaultModuleName,     
+     namespace: defaultNamespace,
+     features: defaultFeatures,
+     author: defaultAuthor,
+     email: defaultEmail,
+     org: defaultOrg,
+     featureJavascript: true,
+     featureCSS: true,
+     featureUnitTest: false,     
    };
  }
  
@@ -134,5 +140,8 @@ async function promptForMissingOptions(options) {
 export async function cli(args) {
  let options = parseArgumentsIntoOptions(args);
  options = await promptForMissingOptions(options);
+ if(options.debug) {
+  console.log(options);
+ }
  await createRedcapModule(options);
 }
