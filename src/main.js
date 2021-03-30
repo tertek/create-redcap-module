@@ -1,5 +1,5 @@
 import chalk from 'chalk';
-import fs from 'fs';
+import fs from 'fs-extra';
 import ncp from 'ncp';
 import path from 'path';
 import { promisify } from 'util';
@@ -17,15 +17,12 @@ const access = promisify(fs.access);
 const copy = promisify(ncp);
 const replace = promisify(rif);
 
-const regex = new RegExp('/(?<=#region includes)(.*?)(?=end)/');
-
-
 async function copyTemplateFiles(options) {
+
   return copy(options.templateDirectory, options.targetDirectory, {
     clobber: false,
   });
 }
-
 
 async function renameTemplateFiles(options){
 
@@ -68,21 +65,60 @@ async function renderTemplateFiles(options) {
 }
 
 // Remove features and/or comments if not wanted
-async function adjustTemplateFeatureJavascript(options) {
-  if(!options.features.includes("Include Javascript and CSS")) {
-    return replace( 
+async function handleFeatureJavascript(options) {
+
+  if(options.featureJavascript) {
+    return replace(
       {
         files: options.targetDirectory +'/*', 
-        from: /#feature jscss([\S\s]*?)#end feature jscss/g, 
-        to: '' 
-      });
+        from: [/#feature js/g, /#end feature js/g], 
+        to: ''
+    });
   }
   else {
     return replace(
       {
         files: options.targetDirectory +'/*', 
-        from: [/#feature jscss/g, /#end feature jscss/g], 
+        from: /#feature js([\S\s]*?)#end feature js/g, 
         to: ''
+    });    
+  }
+}
+
+async function handleFeatureCSS(options) {
+
+  if(options.featureCSS) {
+    return replace(
+      {
+        files: options.targetDirectory +'/*', 
+        from: [/#feature css/g, /#end feature css/g], 
+        to: ''
+    });    
+  } else {
+    return replace(
+      {
+        files: options.targetDirectory +'/*', 
+        from: /#feature css([\S\s]*?)#end feature css/g, 
+        to: ''
+    });  
+
+  }
+}
+
+async function handleFeatureUnitTest(options) {
+  if(options.featureUnitTest) {
+    return replace(
+      {
+        files: options.targetDirectory +'/*', 
+        from: [/#feature unit test/g, /#end feature unit test/g], 
+        to: ''
+    });    
+  } else {
+    return replace( 
+      {
+        files: options.targetDirectory +'/*', 
+        from: /#feature unit test([\S\s]*?)#end feature unit test/g, 
+        to: '' 
       });
   }
 }
@@ -129,16 +165,33 @@ export async function createRedcapModule(options) {
    },
    {
     title: 'Rename template files',
-    task: () => renameTemplateFiles(options)
+    task: () => renameTemplateFiles(options),
    },
    {
     title: 'Render template files',
-    task: () => renderTemplateFiles(options)
+    task: () => renderTemplateFiles(options),
    },
    {
-    title: 'Adjust template feature: Javascript & CSS',
-    task: () => adjustTemplateFeatureJavascript(options)
-   },  
+    title: 'template feature: Javascript',
+    task: (ctx, task) => {
+      task.title = (options.featureJavascript ? "Add " : "Remove ") + task.title;
+      handleFeatureJavascript(options);
+    }  
+   },
+   {
+    title: 'template feature: CSS',
+    task: (ctx, task) =>  {
+      task.title = (options.featureCSS ? "Add " : "Remove ") + task.title;
+      handleFeatureCSS(options);
+    }  
+   },   
+   {
+    title: 'template feature: Unit Testing',
+    task: (ctx ,task) => {
+      task.title = (options.featureUnitTest ? "Add " : "Remove ") + task.title;
+      handleFeatureUnitTest(options)
+    }
+   },
    {
      title: 'Initialize git',
      task: () => initGit(options),

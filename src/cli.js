@@ -32,7 +32,7 @@ async function promptForMissingOptions(options) {
  const defaultAuthor = 'Firstname Lastname';
  const defaultEmail = 'your@email.org';
  const defaultOrg = 'Organisation Name';
- const defaultFeatures = ['Include Javascript and CSS'];
+ const defaultFeatures = ['Include Javascript','Include CSS'];
 
  if (options.skipPrompts) {
    return {
@@ -77,7 +77,9 @@ async function promptForMissingOptions(options) {
     name: 'features',
     message: 'Please choose which features to use',
     choices: [
-      'Include Javascript and CSS'
+      'Include Javascript',
+      'Include CSS',
+      'Include Unit Testing'
     ],
     default: defaultFeatures
   });
@@ -122,6 +124,9 @@ async function promptForMissingOptions(options) {
    email: answers.email,  
    org: answers.org,
    features: answers.features,
+   featureJavascript: answers.features.includes("Include Javascript"),
+   featureCSS: answers.features.includes("Include CSS"),
+   featureUnitTest: answers.features.includes("Include Unit Testing"),
    git: options.git || answers.git,
  };
 }

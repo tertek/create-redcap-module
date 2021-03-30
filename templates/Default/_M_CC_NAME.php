@@ -31,10 +31,12 @@ class _M_CC_NAME extends \ExternalModules\AbstractExternalModule {
     *
     */
     private function renderModule() {
-        #feature jscss
+        #feature js
         $this->includeJavascript();
+        #end feature js
+        #feature css
         $this->includeCSS();
-        #end feature jscss
+        #end feature css
     
         print '<p class="_M_KC_NAME">'.$this->helloFromExternalModule.'<p>';
 
@@ -46,7 +48,7 @@ class _M_CC_NAME extends \ExternalModules\AbstractExternalModule {
 
     }
 
-    #feature jscss
+    #feature js
    /**
     * Include JavaScript files
     *
@@ -63,7 +65,9 @@ class _M_CC_NAME extends \ExternalModules\AbstractExternalModule {
         </script>
         <?php
     }
+    #end feature js
 
+    #feature css
    /**
     * Include Style files
     *
@@ -73,5 +77,5 @@ class _M_CC_NAME extends \ExternalModules\AbstractExternalModule {
         <link rel="stylesheet" href="<?= $this->getUrl('css/style.css')?>">
         <?php
     }
-    #end feature jscss
+    #end feature css
 }
