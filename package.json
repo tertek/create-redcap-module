@@ -35,6 +35,6 @@
   "files": [
     "bin/",
     "src/",
-    "templates/"
+    "templates/"    
   ]
 }
