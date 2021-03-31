@@ -1,6 +1,5 @@
 import chalk from 'chalk';
 import fs from 'fs-extra';
-import ncp from 'ncp';
 import path from 'path';
 import { promisify } from 'util';
 import execa from 'execa';
@@ -17,8 +16,24 @@ const access = promisify(fs.access);
 const replace = promisify(rif);
 
 async function copyTemplateFiles(options) {
+
+  const filterFunc = (src, dest) => {
+
+    if (fs.lstatSync(src).isDirectory()) {
+      if(src.match(/(js|tests|lang)/)) {
+        return false;
+      } else {
+        return true;
+      }
+    } else {
+        return src.match(/.*php/) != null;
+    }
+
+    // your logic here
+    // it will be copied if return true
+  }
   
-  fs.copy(options.templateDirectory, options.targetDirectory, err => {
+  fs.copy(options.templateDirectory, options.targetDirectory, { filter: filterFunc }, err => {
     if (err) return Promise.reject(new Error('Failed to copy files'));
   })
   
