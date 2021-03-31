@@ -38,11 +38,11 @@ class _M_CC_NAME extends \ExternalModules\AbstractExternalModule {
         $this->includeCSS();
         #end feature css
     
-        print '<p class="_M_KC_NAME">'.$this->helloFromExternalModule.'<p>';
+        print '<p class="_M_KC_NAME">'.$this->helloFrom_M_CC_NAME.'<p>';
 
     }
 
-    public function helloFromExternalModule() {
+    public function helloFrom_M_CC_NAME() {
 
         return $this->tt("hello_from").' '.$this->moduleName;
 
