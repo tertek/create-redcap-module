@@ -29,7 +29,7 @@ async function renderTemplateBase(options) {
     fs.writeFile(options.targetDirectory + '/LICENSE', data)
   });
 
-  await Twig.renderFile(options.templateDirectory+'/README.twig', {moduleName:options.moduleName}, (err, data) => {
+  await Twig.renderFile(options.templateDirectory+'/README.twig', {moduleName:options.moduleName, moduleNameSC: options.moduleNameSC}, (err, data) => {
     if(err) return Promise.reject(new Error(err));
     fs.writeFile(options.targetDirectory + '/README.md', data)
   });
