@@ -3,13 +3,11 @@ A simple CLI to generate new REDCap external modules.
 
 ![alt text](/create-redcap-module-carbon.png "Screenshot")
 
-
 ## Requirements
 
 - [Node.js](https://nodejs.org/en/)
 
-## Setup
-
+## How to use
 Navigate into your redcap modules folder
 
 ```bash
@@ -22,7 +20,9 @@ Run the module generator directly over npx
    npx create-redcap-module
 ``` 
 
-After completing the necessary input, a module folder will be available.
+After completing the necessary input, a module folder will be available at `/redcap/modules/`.
+
+
 
 ## Testing
 
@@ -50,8 +50,10 @@ Read more about PHP Unit Testing in the official [PHPUnit Manual](https://phpuni
 ## Roadmap
 
 - ~~Optimize template generation~~
-- Add more features (BabelJS, phpunit, composer, ..)
-- Add more templates (ActionTag, API Extension, ..)
+- Add more features to template(s) (BabelJS, phpunit, composer, ..)
+- Add more template variations (Action Tag, API Extension, ..)
+- Add help option/explanation to CLI (optionator)
+
 - Automatic npm publishing flow (@release)
 
 ## Developer Notice
