@@ -108,13 +108,13 @@ export async function createRedcapModule(options) {
  options = {
    ...options,   
    directoryName: '/' + options.moduleNameSC + '_v1.0.0',
-   targetDirectory: options.targetDirectory || process.cwd() + '\\' + options.moduleNameSC + '_v1.0.0'
+   targetDirectory: path.join(options.targetDirectory || process.cwd(), options.moduleNameSC + '_v1.0.0')
  };
 
  // Fix path for Windows
  const currentFileUrl = import.meta.url;
- const templateDir = path.resolve(
-    new URL(currentFileUrl).pathname.substring(new URL(currentFileUrl).pathname.indexOf('/')+1),
+ const templateDir = path.join(
+    new URL(currentFileUrl).pathname,
     '../../templates',
     options.template.toLowerCase()
   );
