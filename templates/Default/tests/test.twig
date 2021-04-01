@@ -1,0 +1,13 @@
+<?php namespace {{ options.namespace }}\{{ options.moduleNameCC }};
+
+class {{ options.moduleNameCC }}Test extends BaseTest
+{
+   function test{{ options.moduleNameCC }}(){
+      $expected = 'Hello from {{ options.moduleName }}';
+      $actual = $this->module->helloFrom_{{ options.moduleNameCC }}();
+
+      $this->assertSame($expected, $actual);
+      
+   }
+
+}

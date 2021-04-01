@@ -2,6 +2,10 @@ import arg from 'arg';
 import inquirer from 'inquirer';
 import { createRedcapModule } from './main';
 
+import camelCase from 'lodash/camelCase';
+import kebabCase from 'lodash/kebabCase';
+import snakeCase from 'lodash/snakeCase';
+
 function parseArgumentsIntoOptions(rawArgs) {
  const args = arg(
    {
@@ -41,7 +45,10 @@ async function promptForMissingOptions(options) {
    return {
      ...options,
      template: options.template || defaultTemplate,
-     moduleName: defaultModuleName,     
+     moduleName: defaultModuleName,
+     moduleNameCC: camelCase(defaultModuleName),
+     moduleNameKC: kebabCase(defaultModuleName),
+     moduleNameSC: snakeCase(defaultModuleName),
      namespace: defaultNamespace,
      features: defaultFeatures,
      author: defaultAuthor,
@@ -49,6 +56,7 @@ async function promptForMissingOptions(options) {
      org: defaultOrg,
      featureJavascript: true,
      featureCSS: true,
+     featureLang: false,
      featureUnitTest: false,     
    };
  }
@@ -85,7 +93,8 @@ async function promptForMissingOptions(options) {
     choices: [
       'Include Javascript',
       'Include CSS',
-      'Include Unit Testing'
+      'Include Language Files',
+      'Include Unit Testing',
     ],
     default: defaultFeatures
   });
@@ -125,6 +134,9 @@ async function promptForMissingOptions(options) {
    ...options,
    template: options.template ||  answers.template,
    moduleName: answers.moduleName,
+   moduleNameCC: camelCase(answers.moduleName),
+   moduleNameKC: kebabCase(answers.moduleName),
+   moduleNameSC: snakeCase(answers.moduleName),
    namespace: answers.namespace,
    author: answers.author,
    email: answers.email,  
@@ -132,6 +144,7 @@ async function promptForMissingOptions(options) {
    features: answers.features,
    featureJavascript: answers.features.includes("Include Javascript"),
    featureCSS: answers.features.includes("Include CSS"),
+   featureLang: answers.features.includes("Include Language Files"),
    featureUnitTest: answers.features.includes("Include Unit Testing"),
    git: options.git || answers.git,
  };

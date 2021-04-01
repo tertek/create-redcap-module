@@ -1,12 +1,16 @@
 <?php
-// Set the namespace defined in your config file
-namespace _NAMESPACE\_M_CC_NAME;
 
+// Set the namespace defined in your config file
+namespace {{ options.namespace }}\{{ options.moduleNameCC }};
+
+{% if options.featureUnitTest %}
+
+{% endif %}
 
 // Declare your module class, which must extend AbstractExternalModule 
-class _M_CC_NAME extends \ExternalModules\AbstractExternalModule {
+class {{ options.moduleNameCC }} extends \ExternalModules\AbstractExternalModule {
 
-    private $moduleName = "_M_NAME";  
+    private $moduleName = "{{ options.moduleName }}";  
 
    /**
     * Constructs the class
@@ -19,7 +23,7 @@ class _M_CC_NAME extends \ExternalModules\AbstractExternalModule {
     }
 
    /**
-    * Hooks _M_NAME module to redcap_every_page_top
+    * Hooks {{ options.moduleName }} module to redcap_every_page_top
     *
     */
     public function redcap_every_page_top($project_id = null) {
@@ -31,24 +35,28 @@ class _M_CC_NAME extends \ExternalModules\AbstractExternalModule {
     *
     */
     private function renderModule() {
-        #feature js
+        {% if options.featureJavascript %}
         $this->includeJavascript();
-        #end feature js
-        #feature css
+        {% endif %}
+        {% if options.featureCSS %}
         $this->includeCSS();
-        #end feature css
-    
-        print '<p class="_M_KC_NAME">'.$this->helloFrom_M_CC_NAME.'<p>';
+        {% endif %}
+
+        print '<p class="{{ options.moduleNameKC }}">'.$this->helloFrom_{{ options.moduleNameCC }}().'<p>';
 
     }
 
-    public function helloFrom_M_CC_NAME() {
+    public function helloFrom_{{ options.moduleNameCC }}() {
 
+        {% if options.featureLang %}
         return $this->tt("hello_from").' '.$this->moduleName;
+        {% else %}        
+        return 'Hello from '.$this->moduleName;
+        {% endif %}
 
     }
 
-    #feature js
+    {% if options.featureJavascript %}
    /**
     * Include JavaScript files
     *
@@ -59,23 +67,23 @@ class _M_CC_NAME extends \ExternalModules\AbstractExternalModule {
         <script> 
             $(function() {
                 $(document).ready(function(){
-                    _NAMESPACE__M_CC_NAME.init();
+                    {{ options.namespace }}_{{ options.moduleNameCC }}.init();
                 })
             });
         </script>
         <?php
     }
-    #end feature js
+    {% endif %}
 
-    #feature css
+    {% if options.featureCSS %}
    /**
     * Include Style files
     *
     */
     private function includeCSS() {
         ?>
-        <link rel="stylesheet" href="<?= $this->getUrl('css/style.css')?>">
+        <link rel="stylesheet" href="<?= $this->getUrl('style.css')?>">
         <?php
     }
-    #end feature css
+    {% endif %}
 }

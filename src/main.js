@@ -5,137 +5,92 @@ import { promisify } from 'util';
 import execa from 'execa';
 import Listr from 'listr';
 import { projectInstall } from 'pkg-install';
-import rif from 'replace-in-file';
-
-import camelCase from 'lodash/camelCase';
-import kebabCase from 'lodash/kebabCase';
-import snakeCase from 'lodash/snakeCase';
+import Twig from 'twig';
 
 
 const access = promisify(fs.access);
-const replace = promisify(rif);
 
-async function copyTemplateFiles(options) {
 
-  const filterFunc = (src, dest) => {
+//  Render template files with Twig
+async function renderTemplateBase(options) {
 
-    if (fs.lstatSync(src).isDirectory()) {
-      if(src.match(/(js|tests|lang)/)) {
-        return false;
-      } else {
-        return true;
-      }
-    } else {
-        return src.match(/.*php/) != null;
+  //to do: add try catch block
+  await fs.mkdir(options.targetDirectory);
+
+  await Twig.renderFile(options.templateDirectory+'/class.twig', {options:options}, (err, data) => {
+    if(err) return Promise.reject(new Error(err));
+    fs.writeFile(options.targetDirectory + '/' + options.moduleNameCC + '.php', data)
+  });
+
+  await Twig.renderFile(options.templateDirectory+'/config.twig', {options:options}, (err, data) => {
+    if(err) return Promise.reject(new Error(err));
+    fs.writeFile(options.targetDirectory + '/config.json', data)
+  });
+
+  await Twig.renderFile(options.templateDirectory+'/LICENSE.twig', {author:options.author}, (err, data) => {
+    if(err) return Promise.reject(new Error(err));
+    fs.writeFile(options.targetDirectory + '/LICENSE', data)
+  });
+
+  await Twig.renderFile(options.templateDirectory+'/README.twig', {moduleName:options.moduleName}, (err, data) => {
+    if(err) return Promise.reject(new Error(err));
+    fs.writeFile(options.targetDirectory + '/README.md', data)
+  });
+
+  return;
+
+}
+
+async function renderTemplateFeatures(options) {
+
+    //  Javascript
+    if(options.featureJavascript) {
+      await fs.mkdir(options.targetDirectory + '/js');
+
+      await Twig.renderFile(
+        options.templateDirectory+'/js/main.twig', 
+        { options:options }, 
+        ( err, data ) => {
+          if(err) return Promise.reject(new Error(err));
+          fs.writeFile(options.targetDirectory + '/js/main.js', data)
+      });
     }
 
-    // your logic here
-    // it will be copied if return true
-  }
-  
-  fs.copy(options.templateDirectory, options.targetDirectory, { filter: filterFunc }, err => {
-    if (err) return Promise.reject(new Error('Failed to copy files'));
-  })
-  
-}
-
-async function renameTemplateFiles(options){
-
-  const result = await execa(
-    'mv', [ 
-      options.targetDirectory+'/_M_CC_NAME.php', 
-      options.targetDirectory+'/'+camelCase(options.moduleName)+'.php'
-    ])
-
-  if(result.fails) {
-    return Promise.reject(new Error('Failed to rename template files'));
-  }
-
-}
-
-//  Replace names
-async function renderTemplateFiles(options) {
-    return replace( 
-      {
-        files: options.targetDirectory +'/*', 
-        from: [
-          /_M_NAME/g, 
-          /_M_CC_NAME/g,
-          /_M_KC_NAME/g,
-          /_NAMESPACE/g,
-          /_A_NAME/g,
-          /_A_EMAIL/g,
-          /_A_ORG/g,
-        ], 
-        to: [
-          options.moduleName, 
-          camelCase(options.moduleName),
-          kebabCase(options.moduleName),
-          options.namespace, 
-          options.author,
-          options.email,
-          options.org
-        ] 
+    //  CSS
+    if(options.featureCSS) {
+      await Twig.renderFile(
+        options.templateDirectory+'/style.twig', 
+        { moduleNameKC:options.moduleNameKC }, 
+        ( err, data ) => {
+          if(err) return Promise.reject(new Error( err ));
+          fs.writeFile(options.targetDirectory + '/style.css', data)
       });
-}
+    }
 
-// Remove features and/or comments if not wanted
-async function handleFeatureJavascript(options) {
+    //  Language
+    if(options.featureLang) {
+      await fs.mkdir(options.targetDirectory + '/lang');
+      await fs.copyFile(options.templateDirectory + '/lang/English.ini', options.targetDirectory + '/lang/English.ini');
+    }  
 
-  if(options.featureJavascript) {
-    return replace(
-      {
-        files: options.targetDirectory +'/*', 
-        from: [/#feature js/g, /#end feature js/g], 
-        to: ''
-    });
-  }
-  else {
-    return replace(
-      {
-        files: options.targetDirectory +'/*', 
-        from: /#feature js([\S\s]*?)#end feature js/g, 
-        to: ''
-    });    
-  }
-}
-
-async function handleFeatureCSS(options) {
-
-  if(options.featureCSS) {
-    return replace(
-      {
-        files: options.targetDirectory +'/*', 
-        from: [/#feature css/g, /#end feature css/g], 
-        to: ''
-    });    
-  } else {
-    return replace(
-      {
-        files: options.targetDirectory +'/*', 
-        from: /#feature css([\S\s]*?)#end feature css/g, 
-        to: ''
-    });  
-
-  }
-}
-
-async function handleFeatureUnitTest(options) {
-  if(options.featureUnitTest) {
-    return replace(
-      {
-        files: options.targetDirectory +'/*', 
-        from: [/#feature unit test/g, /#end feature unit test/g], 
-        to: ''
-    });    
-  } else {
-    return replace( 
-      {
-        files: options.targetDirectory +'/*', 
-        from: /#feature unit test([\S\s]*?)#end feature unit test/g, 
-        to: '' 
+    //  Tests
+    if(options.featureUnitTest) {
+      await fs.mkdir(options.targetDirectory + '/tests');
+      await Twig.renderFile(
+        options.templateDirectory+'/tests/BaseTest.twig', 
+        { options:options }, 
+        ( err, data ) => {
+          if(err) return Promise.reject(new Error( err ));
+          fs.writeFile(options.targetDirectory + '/tests/BaseTest.php', data)
       });
-  }
+      await Twig.renderFile(
+        options.templateDirectory+'/tests/test.twig', 
+        { options:options }, 
+        ( err, data ) => {
+          if(err) return Promise.reject(new Error( err ));
+          fs.writeFile(options.targetDirectory + '/tests/' + options.moduleNameCC + 'Test.php', data)
+      });      
+    }
 }
 
 
@@ -147,14 +102,16 @@ async function initGit(options) {
  if (result.failed) {
    return Promise.reject(new Error('Failed to initialize git'));
  }
+ await fs.copyFile(options.templateDirectory + '/.gitignore', options.targetDirectory + '/.gitignore');
+
  return;
 }
 
 export async function createRedcapModule(options) {
  options = {
    ...options,   
-   directoryName: '/' + snakeCase(options.moduleName) + '_v1.0.0',
-   targetDirectory: options.targetDirectory || process.cwd() + '/' + snakeCase(options.moduleName) + '_v1.0.0'
+   directoryName: '/' + options.moduleNameSC + '_v1.0.0',
+   targetDirectory: options.targetDirectory || process.cwd() + '\\' + options.moduleNameSC + '_v1.0.0'
  };
 
  // Fix path for Windows
@@ -174,39 +131,15 @@ export async function createRedcapModule(options) {
  }
 
   const tasks = new Listr([
+
    {
-     title: 'Copy template files',
-     task: () => copyTemplateFiles(options),
+     title: 'Render Template Base',
+     task: () => renderTemplateBase(options)
    },
    {
-    title: 'Rename template files',
-    task: () => renameTemplateFiles(options),
-   },
-   {
-    title: 'Render template files',
-    task: () => renderTemplateFiles(options),
-   },
-   {
-    title: 'template feature: Javascript',
-    task: (ctx, task) => {
-      task.title = (options.featureJavascript ? "Add " : "Remove ") + task.title;
-      handleFeatureJavascript(options);
-    }  
-   },
-   {
-    title: 'template feature: CSS',
-    task: (ctx, task) =>  {
-      task.title = (options.featureCSS ? "Add " : "Remove ") + task.title;
-      handleFeatureCSS(options);
-    }  
-   },   
-   {
-    title: 'template feature: Unit Testing',
-    task: (ctx ,task) => {
-      task.title = (options.featureUnitTest ? "Add " : "Remove ") + task.title;
-      handleFeatureUnitTest(options)
-    }
-   },
+    title:  'Render Template Features',
+    task: () => renderTemplateFeatures(options)
+    },   
    {
      title: 'Initialize git',
      task: () => initGit(options),

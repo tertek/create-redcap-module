@@ -30,7 +30,8 @@
     "listr": "^0.14.3",
     "lodash": "^4.17.21",
     "pkg-install": "^1.0.0",
-    "replace-in-file": "^6.2.0"
+    "replace-in-file": "^6.2.0",
+    "twig": "^1.15.4"
   },
   "files": [
     "bin/",

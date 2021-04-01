@@ -3,8 +3,7 @@ A simple CLI to generate new REDCap external modules.
 
 ## Requirements
 
-- Node.js
-- Composer (for testing)
+- [Node.js](https://nodejs.org/en/)
 
 ## Setup
 
@@ -24,13 +23,20 @@ After completing the necessary input, a module folder will be available.
 
 ## Testing
 
-If you would like to run tests with phpunit you need to have composer installed.
-1. Require phpunit within your module folder and check if it is running:
+**Testing Requirements**.
+- [Composer](https://getcomposer.org/)
+
+1. Require phpunit within your module folder `/redcap/modules/your-module-name` and check if it is running:
 
 ```bash
-   composer install
+   composer require --dev phpunit/phpunit
 ``` 
-2. Run your tests which are written within your `/tests` folder:
+
+```bash
+   ./vendor/bin/phpunit --version
+``` 
+
+2. Run your tests that are written within your `/tests` folder:
 
 ```bash
     ./vendor/bin/phpunit tests
@@ -47,6 +53,6 @@ On your REDCap installation checkout the various documentations:
 
 ## To Do
 
--[ ] Add more features.
--[ ] Add more templates (ActionTag, API Extend, etc.)
--[ ] Optimize template generation.
+-[x] Optimize template generation
+-[ ] Add more features (BabelJS, phpunit, composer, ..)
+-[ ] Add more templates (ActionTag, API Extension, ..)
