@@ -1,5 +1,5 @@
 # create-redcap-module
-Template generator for REDCap external modules.
+A simple CLI to generate new REDCap external modules.
 
 ## Requirements
 
@@ -47,6 +47,6 @@ On your REDCap installation checkout the various documentations:
 
 ## To Do
 
-Add more features.
-Add more templates (ActionTag, API Extend, etc.)
-Optimize template generation.
+-[ ] Add more features.
+-[ ] Add more templates (ActionTag, API Extend, etc.)
+-[ ] Optimize template generation.
