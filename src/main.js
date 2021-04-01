@@ -4,14 +4,11 @@ import path from 'path';
 import { promisify } from 'util';
 import execa from 'execa';
 import Listr from 'listr';
-import { projectInstall } from 'pkg-install';
 import Twig from 'twig';
-
 
 const access = promisify(fs.access);
 
-
-//  Render template files with Twig
+//  Renders base template files
 async function renderTemplateBase(options) {
 
   //to do: add try catch block
@@ -41,6 +38,7 @@ async function renderTemplateBase(options) {
 
 }
 
+//  Renders additional template files for features
 async function renderTemplateFeatures(options) {
 
     //  Javascript
@@ -93,7 +91,6 @@ async function renderTemplateFeatures(options) {
     }
 }
 
-
 //  Initialize Git
 async function initGit(options) {
  const result = await execa('git', ['init'], {
@@ -131,7 +128,6 @@ export async function createRedcapModule(options) {
  }
 
   const tasks = new Listr([
-
    {
      title: 'Render Template Base',
      task: () => renderTemplateBase(options)

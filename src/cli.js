@@ -11,11 +11,9 @@ function parseArgumentsIntoOptions(rawArgs) {
    {
      '--git': Boolean,
      '--yes': Boolean,
-     '--install': Boolean,
      '--debug': Boolean,
      '-g': '--git',
      '-y': '--yes',
-     '-i': '--install',
      '-d': '--debug',
    },
    {
@@ -26,7 +24,6 @@ function parseArgumentsIntoOptions(rawArgs) {
    skipPrompts: args['--yes'] || false,
    git: args['--git'] || false,
    template: args._[0],
-   runInstall: args['--install'] || false,
    debug: args['--debug'] || false,
  };
 }

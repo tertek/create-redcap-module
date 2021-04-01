@@ -1,6 +1,9 @@
 # create-redcap-module
 A simple CLI to generate new REDCap external modules.
 
+![alt text](/create-redcap-module-carbon.png "Screenshot")
+
+
 ## Requirements
 
 - [Node.js](https://nodejs.org/en/)
@@ -44,15 +47,21 @@ After completing the necessary input, a module folder will be available.
 Read more about PHP Unit Testing in the official [PHPUnit Manual](https://phpunit.readthedocs.io/en/9.5/index.html).
 
 
-## Docs about REDCap external module development
+## Roadmap
 
-On your REDCap installation checkout the various documentations:
-- External Module Framework - Official Documentation
-- Methods Provided by the External Module Framework
-- External Module Framework Versioning
+- ~~Optimize template generation~~
+- Add more features (BabelJS, phpunit, composer, ..)
+- Add more templates (ActionTag, API Extension, ..)
+- Automatic npm publishing flow (@release)
 
-## To Do
+## Developer Notice
 
--[x] Optimize template generation
--[ ] Add more features (BabelJS, phpunit, composer, ..)
--[ ] Add more templates (ActionTag, API Extension, ..)
+Feature and pull requests are welcome.
+
+## Changelog
+
+Version | Description
+------- | --------------------
+v1.0.0  | Initial release.
+v1.0.1  | Added first features.
+v1.1.0  | Rewrite of most parts.
