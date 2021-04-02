@@ -43,4 +43,5 @@ Version | Description
 v1.0.0  | Initial release.
 v1.0.1  | Added first features.
 v1.1.0  | Rewrite of most parts.
-v1.1.1  | Update Readme(s)
+v1.1.1  | Update Readme(s).
+v1.1.2  | Fix path building cross platform.
