@@ -5,6 +5,8 @@ import { promisify } from 'util';
 import execa from 'execa';
 import Listr from 'listr';
 import Twig from 'twig';
+import os from 'os';
+
 
 const access = promisify(fs.access);
 
@@ -108,16 +110,21 @@ export async function createRedcapModule(options) {
  options = {
    ...options,   
    directoryName: '/' + options.moduleNameSC + '_v1.0.0',
-   targetDirectory: options.targetDirectory || process.cwd() + '\\' + options.moduleNameSC + '_v1.0.0'
+   targetDirectory: options.targetDirectory || path.join(process.cwd(), options.moduleNameSC + '_v1.0.0')
  };
 
- // Fix path for Windows
- const currentFileUrl = import.meta.url;
- const templateDir = path.resolve(
-    new URL(currentFileUrl).pathname.substring(new URL(currentFileUrl).pathname.indexOf('/')+1),
-    '../../templates',
+const fullPathName = new URL(import.meta.url).pathname;
+let templateDir;
+templateDir = path.resolve(
+    fullPathName, 
+    '../../templates', 
     options.template.toLowerCase()
   );
+
+ // Fix path building for Windows
+ if(os.platform() == 'win32') {
+  templateDir = templateDir.replace(/^(\w:\\)(\w:\\)/, '$2');
+ }
  options.templateDirectory = templateDir;
 
  try {
