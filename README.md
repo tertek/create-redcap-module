@@ -1,5 +1,5 @@
 # create-redcap-module
-A simple CLI to generate new REDCap external modules.
+A simple CLI tool to generate new REDCap external modules.
 
 ![alt text](/create-redcap-module-carbon.png "Screenshot")
 
