@@ -30,6 +30,7 @@ If you are not getting the version numbers returned than you may have to add npm
 [What is CLI?](https://www.w3schools.com/whatis/whatis_cli.asp)<br>
 [What is npm?](https://nodejs.org/en/knowledge/getting-started/npm/what-is-npm/)<br>
 [What is npx?](https://medium.com/@maybekatz/introducing-npx-an-npm-package-runner-55f7d4bd282b)<br>
+[Configure npm to work behind a proxy](https://stackoverflow.com/a/10304317/3127170)<br>
 
 #### Setup REDCap environment
 
