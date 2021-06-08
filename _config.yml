@@ -1,1 +1,6 @@
 theme: jekyll-theme-cayman
+title: create-redcap-module
+
+github:
+  repository_url: https://github.com/tertek/create-redcap-module
+  repository_name: create-redcap-module / documentation
