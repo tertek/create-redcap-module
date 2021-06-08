@@ -1,37 +1,67 @@
-## Welcome to GitHub Pages
+## Documentation
 
-You can use the [editor on GitHub](https://github.com/tertek/create-redcap-module/edit/gh-pages/index.md) to maintain and preview the content for your website in Markdown files.
+You can use the "create-redcap-module" CLI tool to easily bootstrap new REDCap modules. The following documentation will help you to setup your system and use the tool. If you are new to CLI & Node.js it may also be helpful to check out the links within the further reading sections.
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+### System Requirements
 
-### Markdown
+#### Install Node.js and NPM
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+Node.js is a requirement for the npm package to be called from your terminal via `npx`. To install Node.js on your operating system go to their official website. 
 
-```markdown
-Syntax highlighted code block
+[Get Node.js here](https://nodejs.org/en/)
 
-# Header 1
-## Header 2
-### Header 3
+After installing Node.js and NPM you should check if you have the correct versions installed and if their commands have been added to your System Environment. To do this open your CLI and run:
 
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
+```bash
+$ npm -v && node -v
 ```
 
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
+The output should be something like:
+```bash
+6.14.8
+v14.15.1
+```
 
-### Jekyll Themes
+If you are not getting the version numbers returned than you may have to add npm to your *Path Variable*.
 
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/tertek/create-redcap-module/settings/pages). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
+*Further Reading*
 
-### Support or Contact
+[Fixing NPM path in Windows](https://stackoverflow.com/a/27864253/3127170)<br>
+[What is CLI?](https://www.w3schools.com/whatis/whatis_cli.asp)<br>
+[What is npm?](https://nodejs.org/en/knowledge/getting-started/npm/what-is-npm/)<br>
+[What is npx?](https://medium.com/@maybekatz/introducing-npx-an-npm-package-runner-55f7d4bd282b)<br>
 
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
+#### Setup REDCap environment
+
+It is recommened to use a local development environment while creating new modules for REDCap. Ensure you are running a stable version of REDCap with a successful configuration of all dependencies, such as database connection and file access permissions. 
+
+
+*Further Reading*
+
+[REDCap Software requirements](https://projectredcap.org/software/requirements/)<br>
+[Official REDCap Download](https://community.projectredcap.org/page/download.html)<br>
+[Laragon - Universal development environment](https://github.com/leokhoa/laragon)<br>
+
+
+### How to use `create-redcap-module`?
+To use `create-redcap-module`  you do not need to install anything else then provided in the **System Requirements**. If you are ready to go open up your CLI and proceed as follows.
+
+Step 1: Navigate to your REDCap module folder
+Depending on where your REDCap version is running you have change directory to the according path:
+
+```bash
+$ cd <my-redcap-directory>/modules/
+```
+
+Step 2: Within your REDCap modules folder call `create-redcap-module` with npx
+Type the following command and you will be lead through the generator steps:
+
+```bash
+$ npx create-redcap-module
+```
+
+After Step 2 completes the script is finished and there should be a new folder within your modules directory with the name that you have chosen for your new module.
+Enjoy your module development!
+
+### Support
+If you have any problems or issues please use the [Github Issues](https://github.com/tertek/create-redcap-module/issues).
