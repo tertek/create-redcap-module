@@ -10,6 +10,7 @@ Install the module from REDCap module repository and enable over Control Center.
 - Setting 1: Do this for that
 - Setting 2: Do this for that
 
+{% if hasTest %}
 ## Testing
 
 **Testing Requirements**.
@@ -31,6 +32,7 @@ Install the module from REDCap module repository and enable over Control Center.
     ./vendor/bin/phpunit tests
 ``` 
 Read more about PHP Unit Testing in the official [PHPUnit Manual](https://phpunit.readthedocs.io/en/9.5/index.html).
+{% endif %}
 
 ## Roadmap
 
