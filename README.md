@@ -51,3 +51,4 @@ v1.0.1  | Added first features.
 v1.1.0  | Rewrite of most parts.
 v1.1.1  | Update Readme(s).
 v1.1.2  | Fix path building cross platform.
+v1.2.0  | Add features through composer: Psalm, PHPUnit and varDump.

@@ -1,6 +1,6 @@
 {
   "name": "create-redcap-module",
-  "version": "1.1.2",
+  "version": "1.2.0",
   "description": "A simple CLI to generate new REDCap external modules.",
   "main": "src/index.js",
   "bin": {
