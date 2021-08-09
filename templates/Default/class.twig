@@ -33,6 +33,7 @@ class {{ options.moduleNameCC }} extends \ExternalModules\AbstractExternalModule
    /**
     * Renders the module
     *
+    * @since 1.0.0
     */
     private function renderModule() {
         {% if options.featureJavascript %}
@@ -46,6 +47,11 @@ class {{ options.moduleNameCC }} extends \ExternalModules\AbstractExternalModule
 
     }
 
+    /**
+    * Returns a test string including module name.
+    *
+    * @since 1.0.0
+    */    
     public function helloFrom_{{ options.moduleNameCC }}() {
 
         {% if options.featureLang %}
@@ -60,6 +66,7 @@ class {{ options.moduleNameCC }} extends \ExternalModules\AbstractExternalModule
    /**
     * Include JavaScript files
     *
+    * @since 1.0.0
     */
     private function includeJavascript() {
         ?>
@@ -79,6 +86,7 @@ class {{ options.moduleNameCC }} extends \ExternalModules\AbstractExternalModule
    /**
     * Include Style files
     *
+    * @since 1.0.0    
     */
     private function includeCSS() {
         ?>
