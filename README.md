@@ -1,5 +1,5 @@
 # create-redcap-module
-A simple CLI to generate new REDCap external modules.
+A simple CLI tool to generate new REDCap external modules.
 
 ![alt text](/create-redcap-module-carbon.png "Screenshot")
 
@@ -8,6 +8,8 @@ A simple CLI to generate new REDCap external modules.
 - [Node.js](https://nodejs.org/en/)
 
 ## How to use
+Please check the [documentation](https://tertek.github.io/create-redcap-module/) for detailed instructions.
+
 Navigate into your redcap modules folder
 
 ```bash
