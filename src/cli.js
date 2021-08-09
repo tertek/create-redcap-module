@@ -23,7 +23,7 @@ function parseArgumentsIntoOptions(rawArgs) {
  return {
    skipPrompts: args['--yes'] || false,
    git: args['--git'] || false,
-   template: args._[0],
+   moduleName: args._[0],
    debug: args['--debug'] || false,
  };
 }
@@ -41,7 +41,7 @@ async function promptForMissingOptions(options) {
  if (options.skipPrompts) {
    return {
      ...options,
-     template: options.template || defaultTemplate,
+     template: defaultTemplate,
      moduleName: defaultModuleName,
      moduleNameCC: camelCase(defaultModuleName),
      moduleNameKC: kebabCase(defaultModuleName),
@@ -127,13 +127,16 @@ async function promptForMissingOptions(options) {
  }
 
  const answers = await inquirer.prompt(questions);
+
+ const moduleName = options.moduleName || answers.moduleName;
+
  return {
    ...options,
-   template: options.template ||  answers.template,
-   moduleName: answers.moduleName,
-   moduleNameCC: camelCase(answers.moduleName),
-   moduleNameKC: kebabCase(answers.moduleName),
-   moduleNameSC: snakeCase(answers.moduleName),
+   template: answers.template,
+   moduleName: moduleName,
+   moduleNameCC: camelCase(moduleName),
+   moduleNameKC: kebabCase(moduleName),
+   moduleNameSC: snakeCase(moduleName),
    namespace: answers.namespace,
    author: answers.author,
    email: answers.email,  
