@@ -3,10 +3,11 @@
 // Set the namespace defined in your config file
 namespace {{ options.namespace }}\{{ options.moduleNameCC }};
 
-{% if options.featureUnitTest %}
-
+{% if options.composer %}
+if( file_exists("vendor/autoload.php") ){
+    require 'vendor/autoload.php';
+}
 {% endif %}
-
 // Declare your module class, which must extend AbstractExternalModule 
 class {{ options.moduleNameCC }} extends \ExternalModules\AbstractExternalModule {
 

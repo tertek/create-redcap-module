@@ -92,6 +92,8 @@ async function promptForMissingOptions(options) {
       'Include CSS',
       'Include Language Files',
       'Include Unit Testing',
+      'Include Psalm',
+      'Include Dev Tooling'
     ],
     default: defaultFeatures
   });
@@ -129,6 +131,7 @@ async function promptForMissingOptions(options) {
  const answers = await inquirer.prompt(questions);
 
  const moduleName = options.moduleName || answers.moduleName;
+ const composer = answers.features.includes("Include Psalm")
 
  return {
    ...options,
@@ -146,7 +149,11 @@ async function promptForMissingOptions(options) {
    featureCSS: answers.features.includes("Include CSS"),
    featureLang: answers.features.includes("Include Language Files"),
    featureUnitTest: answers.features.includes("Include Unit Testing"),
+   featurePsalm: answers.features.includes("Include Psalm"),
+   featureDevTool: answers.features.includes("Include Dev Tooling"),
+
    git: options.git || answers.git,
+   composer: composer,
  };
 }
 

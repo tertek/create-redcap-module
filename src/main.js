@@ -6,6 +6,7 @@ import execa from 'execa';
 import Listr from 'listr';
 import Twig from 'twig';
 import os from 'os';
+import commandExists from 'command-exists';
 
 
 const access = promisify(fs.access);
@@ -31,7 +32,7 @@ async function renderTemplateBase(options) {
     fs.writeFile(options.targetDirectory + '/LICENSE', data)
   });
 
-  await Twig.renderFile(options.templateDirectory+'/README.twig', {moduleName:options.moduleName, moduleNameSC: options.moduleNameSC, hasTest: options.featureUnitTest }, (err, data) => {
+  await Twig.renderFile(options.templateDirectory+'/README.twig', {moduleName:options.moduleName, moduleNameSC: options.moduleNameSC, hasTest: options.featureUnitTest, hasPsalm: options.featurePsalm }, (err, data) => {
     if(err) return Promise.reject(new Error(err));
     fs.writeFile(options.targetDirectory + '/README.md', data)
   });
@@ -93,6 +94,63 @@ async function renderTemplateFeatures(options) {
     }
 }
 
+async function installPsalm() {
+  try {
+
+    await execa('composer', ['require', '--dev', 'vimeo/psalm'], {
+      cwd: options.targetDirectory,
+    });
+
+    await execa('./vendor/bin/psalm', ['--init'], {
+      cwd: options.targetDirectory,
+    });
+
+  } catch(err) {
+    throw new Error('An error occured during Psalm Install.', err);
+  }
+}
+
+async function installUnitTest(options) {
+  try {
+    await execa('composer', ['require', '--dev', 'phpunit/phpunit'], {
+      cwd: options.targetDirectory,
+    })
+  } catch(err) {
+    throw new Error('An error occured during PHPUnit Install.', err);
+  }
+}
+
+async function installDevTool(options) {
+  try {
+    await execa('composer', ['require', '--dev', 'symfony/var-dumper'], {
+      cwd: options.targetDirectory,
+    })
+  } catch(err) {
+    throw new Error('An error occured during symfony/var-dumper Install.', err);
+  }
+}
+
+//  Initialize Composer 
+async function initComposer(options) {
+  return new Listr([
+    {
+      title: 'Install Psalm',
+      task: () => installPsalm(options),
+      enabled: () => options.featurePsalm
+    },
+    {
+      title: 'Install PhpUnit',
+      task: () => installUnitTest(options),
+      enabled: () => options.featureUnitTest      
+    },
+    {
+      title: 'Install Dev Tooling',
+      task: () => installDevTool(options),
+      enabled: () => options.featureDevTool      
+    }    
+  ]);
+  }
+
 //  Initialize Git
 async function initGit(options) {
  const result = await execa('git', ['init'], {
@@ -107,12 +165,23 @@ async function initGit(options) {
 }
 
 export async function createRedcapModule(options) {
+
  options = {
    ...options,   
    directoryName: '/' + options.moduleNameSC + '_v1.0.0',
    targetDirectory: options.targetDirectory || path.join(process.cwd(), options.moduleNameSC + '_v1.0.0')
  };
 
+if(options.composer) {
+  //  Composer installed?
+  try {
+    await commandExists("composer");
+  } catch(err) {
+    throw new Error('A command `composer` does not exist. Please ensure you have installed Composer (https://getcomposer.org/).', err);
+  }
+}
+
+//  Prepare path
 const fullPathName = new URL(import.meta.url).pathname;
 let templateDir;
 templateDir = path.resolve(
@@ -130,25 +199,29 @@ templateDir = path.resolve(
  try {
    await access(templateDir, fs.constants.R_OK);
  } catch (err) {
-   console.error('%s Invalid template name', chalk.red.bold('ERROR'));
-   process.exit(1);
+  throw new Error('Cannot access to dir.', err);
  }
 
-  const tasks = new Listr([
-   {
-     title: 'Render Template Base',
-     task: () => renderTemplateBase(options)
-   },
-   {
+ const tasks = new Listr([
+    {
+      title: 'Render Template Base',
+      task: () => renderTemplateBase(options)
+    },
+    {
     title:  'Render Template Features',
     task: () => renderTemplateFeatures(options)
     },   
-   {
-     title: 'Initialize git',
-     task: () => initGit(options),
-     enabled: () => options.git,
-   }
- ]);
+    {
+      title: 'Install Composer dependencies',
+      task: () => initComposer(options),
+      enabled: () => options.composer,
+    },
+    {
+    title: 'Initialize git',
+    task: () => initGit(options),
+    enabled: () => options.git,
+  }, 
+]);
 
  await tasks.run();
  console.log('%s Your new Redcap Module is ready.', chalk.green.bold('DONE'));
