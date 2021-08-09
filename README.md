@@ -22,6 +22,13 @@ Run the module generator directly over npx
 
 After completing the necessary input, a module folder will be available at `/redcap/modules/`.
 
+## Development
+Feature and pull requests are welcome.
+
+Running the CLI locally:
+1. Clone the repo.
+2. Run `./path-to-module/bin/create-redcap-module`
+
 
 ## Roadmap
 
@@ -32,9 +39,6 @@ After completing the necessary input, a module folder will be available at `/red
 
 - Automatic npm publishing flow (@release)
 
-## Developer Notice
-
-Feature and pull requests are welcome.
 
 ## Changelog
 
