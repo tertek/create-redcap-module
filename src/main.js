@@ -7,6 +7,7 @@ import Listr from 'listr';
 import Twig from 'twig';
 import os from 'os';
 import commandExists from 'command-exists';
+import xml2js  from 'xml2js';
 
 
 const access = promisify(fs.access);
@@ -94,7 +95,7 @@ async function renderTemplateFeatures(options) {
     }
 }
 
-async function installPsalm() {
+async function installPsalm(options) {
   try {
 
     await execa('composer', ['require', '--dev', 'vimeo/psalm'], {
@@ -103,6 +104,37 @@ async function installPsalm() {
 
     await execa('./vendor/bin/psalm', ['--init'], {
       cwd: options.targetDirectory,
+    });
+
+    //  Parse xml, modify and re-build xml and overwrite psalm.xml
+    await fs.readFile(options.targetDirectory + '/psalm.xml', function(err, data) {
+      
+      //  Parse XML
+      xml2js.parseStringPromise(data /*, options */).then(function (result) {
+
+        //  Modify XML
+        var extraFiles = [{
+          directory: {
+            $: {
+              'name': '../../redcap_*/ExternalModules/classes'
+            }
+          }
+        }];
+        result.psalm.extraFiles = extraFiles
+
+        //  Re-build XML
+        const builder = new xml2js.Builder();
+        data = builder.buildObject(result);
+
+        //  Overwrite psalm.xml
+        fs.writeFile(options.targetDirectory + '/psalm.xml', data, (err) => {
+          if (err) throw new Error('An error occured while saving Psalm.xml.', err);;          
+        });
+
+      })
+      .catch(function (err) {
+        throw new Error('An error occured while parsing Psalm.xml.', err);
+      });
     });
 
   } catch(err) {
