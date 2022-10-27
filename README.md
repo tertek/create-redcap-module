@@ -29,7 +29,8 @@ Feature and pull requests are welcome.
 
 Running the CLI locally:
 1. Clone the repo.
-2. Run `./path-to-module/bin/create-redcap-module`
+2. Run `node ./path-to-module/bin/create-redcap-module`
+(please ensure your node version is up to date)
 
 
 ## Roadmap
