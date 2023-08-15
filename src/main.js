@@ -1,14 +1,16 @@
 import chalk from 'chalk';
+import execa from 'execa';
 import fs from 'fs-extra';
 import path from 'path';
 import { promisify } from 'util';
-import execa from 'execa';
 import Listr from 'listr';
 import Twig from 'twig';
 import os from 'os';
 import commandExists from 'command-exists';
 import xml2js  from 'xml2js';
 
+//const chalk = (...args) => import('chalk').then(({default: chalk}) => chalk(...args));
+//const execa = (...args) => import('execa').then(({default: execa}) => execa(...args));
 
 const access = promisify(fs.access);
 
