@@ -20,18 +20,7 @@ Run your tests that are written within your `/tests` folder:
 ``` 
 Read more about PHP Unit Testing in the official [PHPUnit Manual](https://phpunit.readthedocs.io/en/9.5/index.html).
 {% endif %}
-{% if hasPsalm %}
-## Psalm
 
-Run Psalm Taint Analysis to check for vulnerabilites:
-
-```bash
-   ./vendor/bin/psalm --no-diff --taint-analysis
-``` 
-
-`--no-diff` is practical if you run Psalm multiple times without differences in the file.
-Read more about Psalm in the official [Psalm Manual](https://psalm.dev/docs/).
-{% endif %}
 ## Roadmap
 
 - Feature 1

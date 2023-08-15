@@ -5,7 +5,7 @@ A simple CLI tool to generate new REDCap external modules.
 
 ## Requirements
 
-- [Node.js](https://nodejs.org/en/)
+- [Node.js](https://nodejs.org/en/) (developed with v16.20.0, not tested on other versions)
 
 ## How to use
 Please check the [documentation](https://tertek.github.io/create-redcap-module/) for detailed instructions.
@@ -30,7 +30,7 @@ Feature and pull requests are welcome.
 Running the CLI locally:
 1. Clone the repo.
 2. Run `node ./path-to-module/bin/create-redcap-module`
-(please ensure your node version is up to date)
+(please ensure your node version is set to required version ,see `.nvmrc`)
 
 
 ## Roadmap
@@ -54,3 +54,4 @@ v1.1.1  | Update Readme(s).
 v1.1.2  | Fix path building cross platform.
 v1.2.0  | Add features through composer: Psalm, PHPUnit and varDump.
 v1.3.1  | Upgrade REDCap Framework version, upgrade npm dependecies
+v2.0.0  | Update package dependencies, REDCap Framework version, remove psalm task (covered by framework itself)

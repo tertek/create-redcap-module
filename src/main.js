@@ -9,8 +9,6 @@ import os from 'os';
 import commandExists from 'command-exists';
 import xml2js  from 'xml2js';
 
-//const chalk = (...args) => import('chalk').then(({default: chalk}) => chalk(...args));
-//const execa = (...args) => import('execa').then(({default: execa}) => execa(...args));
 
 const access = promisify(fs.access);
 
@@ -35,7 +33,7 @@ async function renderTemplateBase(options) {
     fs.writeFile(options.targetDirectory + '/LICENSE', data)
   });
 
-  await Twig.renderFile(options.templateDirectory+'/README.twig', {moduleName:options.moduleName, moduleNameSC: options.moduleNameSC, hasTest: options.featureUnitTest, hasPsalm: options.featurePsalm }, (err, data) => {
+  await Twig.renderFile(options.templateDirectory+'/README.twig', {moduleName:options.moduleName, moduleNameSC: options.moduleNameSC, hasTest: options.featureUnitTest}, (err, data) => {
     if(err) return Promise.reject(new Error(err));
     fs.writeFile(options.targetDirectory + '/README.md', data)
   });
@@ -97,52 +95,6 @@ async function renderTemplateFeatures(options) {
     }
 }
 
-async function installPsalm(options) {
-  try {
-
-    await execa('composer', ['require', '--dev', 'vimeo/psalm'], {
-      cwd: options.targetDirectory,
-    });
-
-    await execa('./vendor/bin/psalm', ['--init'], {
-      cwd: options.targetDirectory,
-    });
-
-    //  Parse xml, modify and re-build xml and overwrite psalm.xml
-    await fs.readFile(options.targetDirectory + '/psalm.xml', function(err, data) {
-      
-      //  Parse XML
-      xml2js.parseStringPromise(data /*, options */).then(function (result) {
-
-        //  Modify XML
-        var extraFiles = [{
-          directory: {
-            $: {
-              'name': '../../redcap_*/ExternalModules/classes'
-            }
-          }
-        }];
-        result.psalm.extraFiles = extraFiles
-
-        //  Re-build XML
-        const builder = new xml2js.Builder();
-        data = builder.buildObject(result);
-
-        //  Overwrite psalm.xml
-        fs.writeFile(options.targetDirectory + '/psalm.xml', data, (err) => {
-          if (err) throw new Error('An error occured while saving Psalm.xml.', err);;          
-        });
-
-      })
-      .catch(function (err) {
-        throw new Error('An error occured while parsing Psalm.xml.', err);
-      });
-    });
-
-  } catch(err) {
-    throw new Error('An error occured during Psalm Install.', err);
-  }
-}
 
 async function installUnitTest(options) {
   try {
@@ -167,11 +119,6 @@ async function installDevTool(options) {
 //  Initialize Composer 
 async function initComposer(options) {
   return new Listr([
-    {
-      title: 'Install Psalm',
-      task: () => installPsalm(options),
-      enabled: () => options.featurePsalm
-    },
     {
       title: 'Install PhpUnit',
       task: () => installUnitTest(options),
